@@ -1,0 +1,69 @@
+class Shaxs:
+    def __init__(self,ismi,yoshi,jinsi,millati):
+        self.ismi=ismi
+        self.yoshi=yoshi
+        self.jinsi=jinsi
+        self.millati=millati
+    def get_info(self):
+        return f"{self.ismi} \n {self.yoshi}\n "
+    def set_nation(self,new_nation):
+        self.millati=new_nation
+        
+        
+class Professor(Shaxs):
+    def __init__(self, ismi, yoshi, jinsi, millati,darajasi):
+        super().__init__(ismi, yoshi, jinsi, millati)
+        self.darajasi=darajasi
+    def get_info(self):
+        a=super().get_info()
+        a+=self.darajasi
+        return a
+    
+class Foydalanuvchi(Shaxs):
+    def __init__(self, ismi, yoshi, jinsi, millati,turi):
+        super().__init__(ismi, yoshi, jinsi, millati)
+        self.turi=turi
+    def get_info(self):
+        a=super().get_info()
+        a+=self.turi
+        return a
+
+class Sotuvchi(Shaxs):
+    def __init__(self, ismi, yoshi, jinsi, millati,oyligi):
+        super().__init__(ismi, yoshi, jinsi, millati)
+        self.oyligi=oyligi
+        def get_info(self):
+            a=super().get_info()
+            a+=self.oyligi
+            return a
+        
+        
+class Mijoz(Shaxs):
+    def __init__(self, ismi, yoshi, jinsi, millati,xarid_qilgan_tovar):
+        super().__init__(ismi, yoshi, jinsi, millati)
+        self.tovar=xarid_qilgan_tovar
+        def get_info(self):
+            a=super().get_info()
+            a+=self.tovar
+            return a
+
+class Admin(Foydalanuvchi):
+    def ban_user(self,foydalanuvchi):
+        return f"{foydalanuvchi} nomi foydalanuvchi bloklandi"
+    
+obj1=Foydalanuvchi("Jony", "21 yosh", "Erkak", "O`zbek", "CEO")
+obj2=Professor("Valijon", "21 yosh", "Erkak", "O`zbek", "Professor")
+obj3=Sotuvchi("Valijon", "21 yosh", "Erkak", "O`zbek", "3 million")
+obj4=Mijoz("Valijon", "21 yosh", "Erkak", "O`zbek", "Mers")
+obj5=Admin("Jony", "21 yosh", "Erkak", "O`zbek", "Admin")
+
+print(obj1.get_info())
+print()
+print(obj2.get_info())
+print()
+print(obj5.ban_user("Valijony"))
+
+
+
+
+
