@@ -1,0 +1,77 @@
+import pdb
+
+from asyncpg import create_pool
+import asyncio
+
+class PostgreSql:
+    def __init__(self):
+        self.pool = None
+
+    async def create(self):
+        self.pool = await create_pool(
+            user = "postgres",
+            password = "valijon2004",
+            host = "localhost",
+            database = "postgres"
+        )
+
+    async def execute(self, sql, fetch=False, fetchval=False, fetchrow=False, execute=False):
+        async with self.pool.acquire() as connection:
+            async with connection.transaction():
+                if fetch:
+                    result = await connection.fetch(sql)
+                elif fetchval:
+                    result = await connection.fetchval(sql)
+                elif fetchrow:
+                    result = await connection.fetchrow(sql)
+                elif execute:
+                    result = await connection.execute(sql)
+            return result
+
+    async def uquvchilar(self):
+        sql = f"select * from uquvchilar"
+        return await self.execute(sql, fetch=True)
+
+    async def uquvchi_id(self,ism,familiya):
+        sql=f"select id from uquvchilar where ism='{ism}' and familiya='{familiya}'"
+        return await  self.execute(sql,fetchval=True)
+
+    async def id_uquvchi(self,id):
+        sql=f"select ism,familiya from uquvchilar where id={id}"
+        return await self.execute(sql,fetchrow=True)
+
+    async def change_ism(self,old_ism,new_ism):
+        sql=f"update uquvchilar set ism='{new_ism}' where ism='{old_ism}'"
+        return await self.execute(sql,execute=True)
+
+
+# Har bir asinxron method uchun asinxron funksiya yaratish kerak  
+async def test():
+    db = PostgreSql()
+    await db.create()
+    users = await db.uquvchilar()
+    print(users)
+
+async def uquvchi_id(ism,familiya):
+    db=PostgreSql()
+    await db.create()
+    id =await db.uquvchi_id(ism,familiya)
+    print(id)
+
+async def id_uquvchi(id):
+    db=PostgreSql()
+    await db.create()
+    user= await db.id_uquvchi(id)
+    print(user)
+
+async def change_ism(old_ism,new_ism):
+    db=PostgreSql()
+    await db.create()
+    await db.change_ism(old_ism,new_ism)
+
+# Asinxron qismni ishga tushirish uchun qo`llaniladigan qism
+asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+asyncio.run(test())
+asyncio.run(uquvchi_id("Valijon","Dosov"))
+asyncio.run(id_uquvchi(1))
+asyncio.run(change_ism("Matkazim","Matkarim"))
